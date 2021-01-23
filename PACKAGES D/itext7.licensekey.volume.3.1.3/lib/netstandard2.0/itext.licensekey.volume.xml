@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>itext.licensekey.volume</name>
+    </assembly>
+    <members>
+        <member name="T:iText.License.Api.IVolumeResultProcessor`1">
+            <summary>Processing results interface based on processed object</summary>
+            <typeparam name="T">the processed object</typeparam>
+        </member>
+        <member name="M:iText.License.Api.IVolumeResultProcessor`1.OnSuccess(`0)">
+            <summary>Processing the success result</summary>
+            <param name="data">the processed data object</param>
+        </member>
+        <member name="M:iText.License.Api.IVolumeResultProcessor`1.OnFailure(`0)">
+            <summary>Processing the failure result</summary>
+            <param name="data">the processed data object</param>
+        </member>
+        <member name="T:iText.License.Api.IVolumeWriter`1">
+            <summary>Writing interface based on writing object</summary>
+            <typeparam name="T">the object to write</typeparam>
+        </member>
+        <member name="M:iText.License.Api.IVolumeWriter`1.Write(`0)">
+            <summary>Writes the data</summary>
+            <param name="data">the object to write</param>
+            <returns>
+            
+            <see langword="true"/>
+            if the write operation finished successfully.
+            <see langword="false"/>
+            in other case
+            </returns>
+        </member>
+        <member name="T:iText.License.Api.Resultprocessor.ConsecutiveFailuresLogResultProcessor`1">
+            <summary>The result processor class to log a message after consecutive failures.</summary>
+            <typeparam name="T">the processed object</typeparam>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.ConsecutiveFailuresLogResultProcessor`1.#ctor(System.String,System.Int32)">
+            <summary>Create processor instance</summary>
+            <param name="logMessage">the message to log</param>
+            <param name="errorLimit">the consecutive error limit</param>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.ConsecutiveFailuresLogResultProcessor`1.OnSuccess(`0)">
+            <summary>Reset error counter</summary>
+            <param name="data">the processed data object</param>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.ConsecutiveFailuresLogResultProcessor`1.OnFailure(`0)">
+            <summary>Increment error counter.</summary>
+            <remarks>
+            Increment error counter. Logs a specified message on first failure and then
+            after each specified amount of errors
+            </remarks>
+            <param name="data">the processed data object</param>
+        </member>
+        <member name="T:iText.License.Api.Resultprocessor.ConsequentResultProcessor`1">
+            <summary>
+            The result processor wrapper for ordered invocation of multiple
+            <see cref="T:iText.License.Api.IVolumeResultProcessor`1"/>.
+            </summary>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.ConsequentResultProcessor`1.#ctor(System.Collections.Generic.IList{iText.License.Api.IVolumeResultProcessor{`0}})">
+            <summary>Create the instance with specified list of processors</summary>
+            <param name="processors">the ordered list of processors for invocation</param>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.ConsequentResultProcessor`1.OnSuccess(`0)">
+            <summary>
+            Invokes
+            <see cref="!:iText.License.Api.IVolumeResultProcessor&lt;T&gt;.OnSuccess(System.Object)"/>
+            for all specified processors with order preserving
+            </summary>
+            <param name="data">the processed data object</param>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.ConsequentResultProcessor`1.OnFailure(`0)">
+            <summary>
+            Invokes
+            <see cref="!:iText.License.Api.IVolumeResultProcessor&lt;T&gt;.OnFailure(System.Object)"/>
+            for all specified processors with order preserving
+            </summary>
+            <param name="data">the processed data object</param>
+        </member>
+        <member name="T:iText.License.Api.Resultprocessor.StrictCheckResultProcessor">
+            <summary>
+            The result processor class to process
+            <see cref="T:iText.License.Volume.VolumeData"/>
+            and throw an exception after
+            consecutive failures for strict events.
+            </summary>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.StrictCheckResultProcessor.#ctor(System.String,System.Int32)">
+            <summary>Create processor instance</summary>
+            <param name="errorMessage">the message for the exception</param>
+            <param name="errorLimit">the consecutive error limit</param>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.StrictCheckResultProcessor.OnSuccess(iText.License.Volume.VolumeData)">
+            <summary>Reset strict error counter in case of strict event</summary>
+            <param name="data">the processed data object</param>
+        </member>
+        <member name="M:iText.License.Api.Resultprocessor.StrictCheckResultProcessor.OnFailure(iText.License.Volume.VolumeData)">
+            <summary>Increment strict error counter in case of strict event and check the error limit</summary>
+            <param name="data">the processed data object</param>
+        </member>
+        <member name="T:iText.License.Api.VolumeEventDataHandler`2">
+            <summary>
+            This class implements logic of
+            <see cref="T:iText.Kernel.Counter.Data.EventDataHandler`2"/>
+            with Strategy pattern for handling
+            the processing logic with
+            <see cref="T:iText.License.Api.IVolumeWriter`1"/>
+            and the result processing logic with
+            <see cref="T:iText.License.Api.IVolumeResultProcessor`1"/>.
+            </summary>
+            <typeparam name="T">data signature type</typeparam>
+            <typeparam name="V">data type</typeparam>
+        </member>
+        <member name="M:iText.License.Api.VolumeEventDataHandler`2.UpdateWritingLogic(iText.License.Api.IVolumeWriter{`1},iText.License.Api.IVolumeResultProcessor{`1})">
+            <summary>Update writing logic with corresponding result processor.</summary>
+            <remarks>
+            Update writing logic with corresponding result processor.
+            Due to parent class implementation the problem with processing the result of an old writer
+            by a new result processor may occur.
+            </remarks>
+            <param name="newWriter">the new writer to set</param>
+            <param name="newResultProcessor">the new result processor to set</param>
+            <returns>
+            
+            <see langword="true"/>
+            is at least one of writer or result processor instance changed
+            </returns>
+        </member>
+        <member name="T:iText.License.Kinesis.AbstractKinesisWriter`1">
+            <summary>
+            Abstract writer that sends data to specified AWS Kinesis stream with credentials
+            obtained from
+            <see cref="T:iText.License.Kinesis.IKinesisClientProvider"/>
+            </summary>
+            <typeparam name="T">the object to be sent</typeparam>
+        </member>
+        <member name="M:iText.License.Kinesis.AbstractKinesisWriter`1.#ctor(System.Int32,System.String,iText.License.Kinesis.IKinesisClientProvider)">
+            <summary>Create an instance of Kinesis Writer</summary>
+            <param name="capacity">the maximum record size</param>
+            <param name="streamName">the Kinesis stream name to send data</param>
+            <param name="kinesisClientProvider">the Kinesis client provider</param>
+        </member>
+        <member name="M:iText.License.Kinesis.AbstractKinesisWriter`1.BuildCredentials(System.String,System.String,Amazon.RegionEndpoint)">
+            <summary>
+            Create
+            <see cref="T:Amazon.Kinesis.IAmazonKinesis"/>
+            object with specified credentials
+            </summary>
+            <param name="accessKey">the access key</param>
+            <param name="secretKey">the secret key</param>
+            <param name="region">the AWS region</param>
+            <returns>the configured kinesis client</returns>
+        </member>
+        <member name="M:iText.License.Kinesis.AbstractKinesisWriter`1.ToBytes(`0)">
+            <summary>Convert data object to byte array for send</summary>
+            <param name="data">object to convert</param>
+            <returns>byte array to send</returns>
+        </member>
+        <member name="T:iText.License.Kinesis.IKinesisClientProvider">
+            <summary>Amazon Kinesis client provider</summary>
+        </member>
+        <member name="M:iText.License.Kinesis.IKinesisClientProvider.GetClient">
+            <returns>Amazon Kinesis client</returns>
+        </member>
+        <member name="M:iText.License.Kinesis.IKinesisClientProvider.Refresh">
+            <summary>refresh client</summary>
+        </member>
+        <member name="T:iText.License.Kinesis.RotationKinesisClientProvider">
+            <summary>Amazon Kinesis Client provider that can handle multiple clients and rotation between them</summary>
+        </member>
+        <member name="M:iText.License.Kinesis.RotationKinesisClientProvider.#ctor(Amazon.Kinesis.IAmazonKinesis)">
+            <summary>Create client provider with single client</summary>
+            <param name="client">the Amazon Kinesis client to use</param>
+        </member>
+        <member name="M:iText.License.Kinesis.RotationKinesisClientProvider.#ctor(System.Collections.Generic.ICollection{Amazon.Kinesis.IAmazonKinesis})">
+            <summary>Create client provider with list of clients</summary>
+            <param name="clients">the list of Amazon Kinesis clients to use</param>
+        </member>
+        <member name="T:iText.License.LicenseKeyVolumeConfigurer">
+            <summary>The static API configurer for volume license reporting</summary>
+        </member>
+        <member name="M:iText.License.LicenseKeyVolumeConfigurer.UseRemoteReporting">
+            <summary>Select remote reporting type in which events are sent over the web to a remote server.</summary>
+        </member>
+        <member name="M:iText.License.LicenseKeyVolumeConfigurer.UseLocalReporting(System.String)">
+            <summary>Select local reporting type for License Key Volume with specified root directory for generated reports
+                </summary>
+            <param name="directoryToWritePath">
+            the path to local directory for writing reports. If it is null,
+            then System property
+            <see cref="F:iText.License.LicenseKeyVolumeConfigurer.LOCAL_FILE_DIR_PATH_PROPERTY_NAME"/>
+            ,
+            or System environment variable
+            <see cref="F:iText.License.LicenseKeyVolumeConfigurer.LOCAL_FILE_DIR_PATH_ENVIRONMENT_VARIABLE_NAME"/>
+            will be used, or the path configured in license file.
+            </param>
+        </member>
+        <member name="M:iText.License.LicenseKeyVolumeConfigurer.ResetApiConfiguration">
+            <summary>Reset API configuration.</summary>
+            <remarks>Reset API configuration. Can be used to use environment variables or default logic after API use.
+                </remarks>
+        </member>
+        <member name="T:iText.License.VolumeCounterLoader">
+            <summary>Entry point for volume counter registration.</summary>
+        </member>
+        <member name="M:iText.License.VolumeCounterLoader.Update">
+            <summary>Register new volume counter.</summary>
+            <remarks>Register new volume counter. Updates it info if it was already registered.</remarks>
+        </member>
+    </members>
+</doc>
